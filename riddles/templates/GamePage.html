@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <link type="text/javascript" href="{% static 'Game.js' %}">
+   <link rel="stylesheet" href="{% static 'GamePageStyles.css' %}">
+    <script type="text/javascript">playerid = {{ playerid }};</script>
+
+</head>
+
+<body>
+    {% for k in boards %}
+        <div class="board">
+
+        {% for i in numbers %}
+        <div>
+            {% for j in i%}
+                <div class="block" id='{{ j }}'></div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        </div>
+    {% endfor %}
+    <script src="{% static 'Game.js' %}"> </script>
+</body>
+
+</html>

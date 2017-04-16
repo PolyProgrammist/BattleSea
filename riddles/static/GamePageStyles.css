@@ -1,0 +1,23 @@
+.block{
+    width: 40px;
+    height: 40px;
+    background-color: #b0ceff;
+    border: 3px solid black;
+    display: inline-block;
+    padding: 0;
+    column-gap: 0;
+}
+
+body{
+    text-align: center;
+}
+
+.board{
+    display: inline-block;
+    padding: 50px;
+}
+
+.changed-state{
+    background-color: red;
+    transform: rotateZ(90deg);
+}
