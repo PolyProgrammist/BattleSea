@@ -6,12 +6,6 @@ $(window).ready(function(){
     healthy_color = "#2edc2c";
 
     $('.block').click(function(event){
-        if($(this).attr('killed') != 1) {
-            $(this).attr('killed', '1');
-        }
-        else{
-            $(this).attr('killed', '2');
-        }
         handleclick(event, this);
     });
 
@@ -30,9 +24,10 @@ $(window).ready(function(){
         if (gamestate == 'playing' && t == 'o')
             handlehit.reqpos(event, obj);
         else if (gamestate == 'customizing' && t == 'm'){
-            $(obj).css('background-color', healthy_color);
             pos = rowcol(event);
-            ships[pos[0]][pos[1]] = 'healthy';
+            ships[pos[0]][pos[1]] = ships[pos[0]][pos[1]] == 'healthy' ? 'sea' : 'healthy';
+            color = ships[pos[0]][pos[1]] == 'healthy' ? healthy_color : sea_color;
+            $(obj).css('background-color', color);
         }
     }
 
@@ -62,8 +57,6 @@ $(window).ready(function(){
 
     $('#submit').click(function (event) {
         var myEvent = {ships : translateToDigs(ships) };
-        console.log('kek')
-        console.log(myEvent);
         console.log(JSON.stringify(myEvent));
         $.ajax({
             url: '/thejsonevent/',

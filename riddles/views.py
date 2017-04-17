@@ -36,14 +36,7 @@ def createuserview(request):
 def thejsonevent(request):
     if request.is_ajax():
         if request.method == 'POST':
-            print(request)
-            print(request.body)
             data = json.loads(request.body)
-            print(data)
             t = data['ships']
-            print(t)
-            print(t[0][0])
-            print('Ok table' if t[0][0] == 1 else 'Bad table')
-            return JsonResponse({'result': 'Ok table' if t[0][0] == 1 else 'Bad table'})
-
-    return JsonResponse({'Result': 'Not ajax or not GET'})
+            return JsonResponse({'result': 'Ok table' if SeaController.FieldValidation(t).is_valid() else 'Bad table'})
+    return JsonResponse({'result': 'Not ajax or not GET'})
