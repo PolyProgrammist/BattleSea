@@ -1,8 +1,9 @@
 $(window).ready(function(){
-    untouched_color = '#87b7ff';
+    sea_color = '#87b7ff';
     hit_color = '#eca7bd';
-    destroy_color = "#ff7a55";
-    fail_color = "#f7ffcc";
+    destroyed_color = "#ff7a55";
+    failed_color = "#f7ffcc";
+    healthy_color = "#2edc2c";
 
     $('.block').click(function(event){
         if($(this).attr('killed') != 1) {
@@ -11,13 +12,79 @@ $(window).ready(function(){
         else{
             $(this).attr('killed', '2');
         }
-        reqpos(event, this);
+        handleclick(event, this);
     });
-    rowcol = function (event) { return [event.target.id.charAt(5), event.target.id.charAt(6)]; };
-    getreq = function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" };
-    reqpos = function (event, obj) {$.get( getreq(rowcol(event)), function(data) {handle(data, obj);});};
 
-    handle = function (data, obj) {
-        $(obj).css('background-color', destroy_color);
+    rowcol = function (event) { return [event.target.id.charAt(6), event.target.id.charAt(7)]; };
+
+    var handlehit = {
+        getreq : function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" },
+        handle : function (data, obj) {
+            $(obj).css('background-color', destroyed_color);
+        },
+        reqpos : function (event, obj) {$.get( handlehit.getreq(rowcol(event)), function(data) {handlehit.handle(data, obj);});}
     };
+
+    function handleclick(event, obj){
+        t = event.target.id.charAt(0);
+        if (gamestate == 'playing' && t == 'o')
+            handlehit.reqpos(event, obj);
+        else if (gamestate == 'customizing' && t == 'm'){
+            $(obj).css('background-color', healthy_color);
+            pos = rowcol(event);
+            ships[pos[0]][pos[1]] = 'healthy';
+        }
+    }
+
+    var ships = [];
+    var gamestate = 'customizing';
+    var sitranslate = {'sea' : 0, 'healthy' : 1, 'hit' : 2, 'destroyed' : 3, 'failed' : 4};
+    var istranslate = ['sea', 'healthy', 'hit', 'destroyed', 'failed'];
+    function startpreparing() {
+        for (i = 0; i < 10; i++) {
+            ships.push([]);
+            for (j = 0; j < 10; j++)
+                ships[i].push('sea');
+        }
+    }
+
+    startpreparing();
+
+    function translateToDigs(ships){
+        res = [];
+        for (i = 0; i < 10; i++) {
+            res.push([]);
+            for (j = 0; j < 10; j++)
+                res[i].push(sitranslate[ships[i][j]]);
+        }
+        return res;
+    }
+
+    $('#submit').click(function (event) {
+        var myEvent = {ships : translateToDigs(ships) };
+        console.log('kek')
+        console.log(myEvent);
+        console.log(JSON.stringify(myEvent));
+        $.ajax({
+            url: '/thejsonevent/',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(myEvent),
+            dataType: 'text',
+            success: function(result) {
+                t = JSON.parse(result);
+                alert(t['result']);
+            }
+        });
+    });
+
 });
+// handle
+// 0 - customizing
+// 1 - playing
+// blocks
+// 0 - sea
+// 1 - healthy
+// 2 - hit
+// 3 - destroyed
+// 4 - failed

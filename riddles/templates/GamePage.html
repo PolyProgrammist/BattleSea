@@ -12,19 +12,20 @@
 </head>
 
 <body>
-    {% for k in boards %}
+    {% for board in blocks %}
         <div class="board">
 
-        {% for i in numbers %}
+        {% for row in board %}
         <div>
-            {% for j in i%}
-                <div class="block" id='{{ j }}'></div>
+            {% for col in row %}
+                <div class="block" id='{{ col }}'></div>
             {% endfor %}
         </div>
         {% endfor %}
 
         </div>
     {% endfor %}
+    <button id="submit">Submit</button>
     <script src="{% static 'Game.js' %}"> </script>
 </body>
 
