@@ -11,12 +11,7 @@ $(window).ready(function(){
         else{
             $(this).attr('killed', '2');
         }
-        //reqpos(event, this);
-        console.log(playerid);
-        $.get(playerid + '/showid/', function (data) {
-            console.log(data['temp']);
-            console.log(data);
-        });
+        reqpos(event, this);
     });
     rowcol = function (event) { return [event.target.id.charAt(5), event.target.id.charAt(6)]; };
     getreq = function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" };

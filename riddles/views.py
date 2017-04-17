@@ -14,17 +14,17 @@ def gameview(request, playerid):
     return render(request, 'GamePage.html', {'boards': boards, 'numbers': numbers, 'playerid': playerid})
 
 
-def hitview(request, row, col):
+def hitview(request, row, col, playerid):
     return JsonResponse({'result': 'ok', 'row' : row, 'col' : col})
 
 
 def testifplaying(request, playerid):
-    return JsonResponse({'playing': SeaState.objects.filter(pk=playerid, customizing=True).count() > 0})
+    t = SeaState.objects.filter(pk=playerid, customizing=True).count()
+    return JsonResponse({'playing': t > 0})
 
 
 def createuserview(request):
     ss = SeaState()
     ss.save()
     SeaController.creategames()
-    print(ss.pk)
     return render(request, 'Flappy.html', {'playerid' : ss.pk})

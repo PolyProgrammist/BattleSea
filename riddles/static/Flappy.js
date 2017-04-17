@@ -52,14 +52,14 @@ $(window).ready(function() {
             this.x += this.speedX;
             this.y += this.speedY + this.gravitySpeed;
             this.hitBottom();
-        }
+        };
         this.hitBottom = function () {
             var rockbottom = myGameArea.canvas.height - this.height;
             if (this.y > rockbottom) {
                 this.y = rockbottom;
                 this.gravitySpeed = 0;
             }
-        }
+        };
         this.crashWith = function (otherobj) {
             var myleft = this.x;
             var myright = this.x + (this.width);
@@ -78,7 +78,7 @@ $(window).ready(function() {
     }
 
     function updateGameArea() {
-        checkNewGame()
+        checkNewGame();
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         for (i = 0; i < myObstacles.length; i += 1) {
             if (myGamePiece.crashWith(myObstacles[i])) {
@@ -127,15 +127,18 @@ $(window).ready(function() {
     });
 
     function checkNewGame() {
-        console.log('checking for game');
-        $.get(playerid + "/testifplaying/", function (response) {
-            console.log('trying to find a game');
-            if (response['playing']) {
-                console.log('game found');
-                window.location.href = "http://127.0.0.1:8000/" + playerid + "/game/";
-            }
-        });
+        reqcnt += 1;
+        if (reqcnt > 100) {
+            $.get(playerid + "/testifplaying/", function (response) {
+                console.log('responsed');
+                if (response['playing']) {
+                    window.location.href = "http://127.0.0.1:8000/" + playerid + "/game/";
+                }
+            });
+            reqcnt = 0;
+        }
     }
 
+    var reqcnt = 0;
     startGame();
 });
