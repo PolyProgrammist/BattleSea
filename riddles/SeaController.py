@@ -92,8 +92,10 @@ class HitMaker:
         GameModel.change_turn(self.playerid)
         self.stringchangestate = json.dumps(self.changestate)
         SeaState.objects.filter(pk=GameModel.otheridclass(self.playerid)).update(field=self.stringchangestate)
-        return self.changestate
+        return self.hidden(self.changestate)
 
+    def hidden(self, changestate):
+        return [[0 if changestate[i][j] == 1 else changestate[i][j] for j in range(10)] for i in range(10)]
 
     def dfs_check_kill(self, i, j):
         self.was[i][j] = True
