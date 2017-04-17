@@ -7,6 +7,7 @@ def creategames():
         if i + 1 < len(q):
             create_one_game(q[i], q[i + 1])
 
+
 def create_one_game(a, b):
     game = GameModel(player1=a.pk, player2=b.pk, turn=0)
     game.save()
@@ -60,4 +61,18 @@ class FieldValidation:
                 res += size
         return res
 
-#[[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        # [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+
+
+class HitMaker:
+    def __init__(self, playerid, row, col):
+        self.playerid = playerid
+        self.row = row
+        self.col = col
+
+    def can_hit(self):
+        game = GameModel.objects.get(pk=SeaState.objects.get(pk=self.playerid).gameid)
+        return game['field'][self.row][self.col] == 0
+
+    def make_hit(self):
+        return None

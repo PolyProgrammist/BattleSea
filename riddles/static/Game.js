@@ -15,10 +15,12 @@ $(window).ready(function(){
     var handlehit = {
         getreq : function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" },
         handle : function (data, obj) {
-            otherships = data['ships'];
-            update_colors();
-            turn = !turn;
-            waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
+            if (data['result'] == 'ok') {
+                otherships = data['ships'];
+                update_colors();
+                turn = !turn;
+                waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
+            }
         },
         reqpos : function (event, obj) {$.get( handlehit.getreq(rowcol(event)), function(data) {handlehit.handle(data, obj);});}
     };
