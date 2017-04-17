@@ -21,7 +21,7 @@ def gameview(request, playerid):
 def hitview(request, row, col, playerid):
     t = SeaController.HitMaker(playerid, row, col)
     if (t.can_hit()):
-        d = t.make_hit();
+        d = t.make_hit()
         return JsonResponse({'result': 'ok', 'ships': d})
     else:
         return JsonResponse({'result': 'fail'})
@@ -54,4 +54,4 @@ def thejsonevent(request):
 def testifopponentsubmitted(request, playerid):
     otherid = GameModel.otheridclass(playerid)
     submitted = SeaState.objects.get(pk=otherid).playing
-    return JsonResponse({'submitted': submitted})
+    return JsonResponse({'submitted': submitted, 'turn' : GameModel.get_client_turn(playerid)})

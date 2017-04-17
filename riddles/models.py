@@ -12,10 +12,25 @@ class GameModel(models.Model):
             return  self.player2
         else:
             return self.player1
+
     @classmethod
     def otheridclass(cls, playerid):
-        return GameModel.objects.get(pk=(SeaState.objects.get(pk=playerid).gameid)).otherid(playerid)
+        return cls.game_by_user(playerid).otherid(playerid)
 
+    @classmethod
+    def get_client_turn(cls, playerid):
+        game = cls.game_by_user(playerid)
+        return (game.player1 == playerid) == game.turn
+
+    @classmethod
+    def change_turn(cls, playerid):
+        game = cls.game_by_user(playerid)
+        game.turn = not game.turn
+        game.save()
+
+    @classmethod
+    def game_by_user(cls, playerid):
+        return GameModel.objects.get(pk=(SeaState.objects.get(pk=playerid).gameid))
 
 class SeaState(models.Model):
     playing = models.BooleanField(default=False)

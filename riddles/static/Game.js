@@ -42,9 +42,9 @@ $(window).ready(function(){
     var otherships = [];
     var turn;
     var gamestate = 'customizing';
-    var sitranslate = {'sea' : 0, 'healthy' : 1, 'hit' : 2, 'destroyed' : 3, 'failed' : 4};
-    var istranslate = ['sea', 'healthy', 'hit', 'destroyed', 'failed'];
-    var ictranslate = [sea_color, healthy_color, hit_color, destroyed_color, failed_color];
+    var sitranslate = {'sea' : 0, 'healthy' : 1, 'hit' : 2, 'destroyed' : 3, 'failed' : 4, 'cannot' : 5};
+    var istranslate = ['sea', 'healthy', 'hit', 'destroyed', 'failed', 'cannot'];
+    var ictranslate = [sea_color, healthy_color, hit_color, destroyed_color, failed_color, cannot_color];
     function startpreparing() {
         for (i = 0; i < 10; i++) {
             myships.push([]);
