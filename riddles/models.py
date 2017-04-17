@@ -7,27 +7,13 @@ class GameModel(models.Model):
     turn = models.BooleanField(default=False)
 
     def otherid(self, playerid):
-        print('otherid object method')
         if playerid == self.player1:
             return  self.player2
         else:
             return self.player1
     @classmethod
     def otheridclass(cls, playerid):
-        print('otherid class method')
-        t = SeaState.objects.get(pk=playerid)
-        print(t)
-        print('this seastate defined')
-        tmp = t.gameid
-        print(tmp)
-        print('game id defined')
-        tmp2 = GameModel.objects.get(pk=tmp)
-        print(tmp2)
-        print('gamemodel defined')
-        tmp3 = tmp2.otherid(playerid)
-        print(tmp3)
-        print('otherid defined, ending class method')
-        return tmp3
+        return GameModel.objects.get(pk=(SeaState.objects.get(pk=playerid).gameid)).otherid(playerid)
 
 
 class SeaState(models.Model):

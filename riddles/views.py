@@ -42,9 +42,6 @@ def thejsonevent(request):
     return JsonResponse({'result': 'Not ajax or not GET'})
 
 def testifopponentsubmitted(request, playerid):
-    print('starting')
     otherid = GameModel.otheridclass(playerid)
-    print('otherid found')
     submitted = SeaState.objects.get(pk=otherid).playing
-    print('submitted defined')
     return JsonResponse({'submitted' : submitted})
