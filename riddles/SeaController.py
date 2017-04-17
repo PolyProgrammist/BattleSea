@@ -8,7 +8,7 @@ def creategames():
             create_one_game(q[i], q[i + 1])
 
 def create_one_game(a, b):
-    game = GameModel(player1=a.pk, player2=b.pk)
+    game = GameModel(player1=a.pk, player2=b.pk, turn=0)
     game.save()
     a.customizing = True
     b.customizing = True

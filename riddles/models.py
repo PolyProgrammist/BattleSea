@@ -5,6 +5,7 @@ class GameModel(models.Model):
     player1 = models.IntegerField(default=0)
     player2 = models.IntegerField(default=0)
     turn = models.BooleanField(default=False)
+    lastchange = models.CharField(max_length=3) #position and state
 
     def otherid(self, playerid):
         if playerid == self.player1:
@@ -20,7 +21,7 @@ class SeaState(models.Model):
     playing = models.BooleanField(default=False)
     customizing = models.BooleanField(default=False)
     gameid = models.IntegerField(default=0)
-    field = models.CharField(max_length=255)
+    field = models.CharField(max_length=512)
 
     @classmethod
     def plays(cls, playerid):
