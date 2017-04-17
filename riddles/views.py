@@ -26,6 +26,13 @@ def hitview(request, row, col, playerid):
     else:
         return JsonResponse({'result': 'fail'})
 
+def testifopponentwent(request, playerid):
+    if not GameModel.get_client_turn(playerid):
+        return JsonResponse({'went' : False})
+    stringchangestate = SeaState.objects.get(pk=GameModel.otheridclass(playerid)).field
+    changestate = json.loads(stringchangestate)
+    return JsonResponse({'went' : True, 'ships' : changestate})
+
 
 def testifplaying(request, playerid):
     return JsonResponse({'playing': SeaState.plays(playerid)})
