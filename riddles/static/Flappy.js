@@ -4,7 +4,6 @@ $(window).ready(function() {
     var myScore;
 
     function startGame() {
-        createUserRequest();
         myGamePiece = new component(30, 30, "red", 10, 120);
         myGamePiece.gravity = 0.05;
         myScore = new component("30px", "Consolas", "black", 280, 40, "text");
@@ -120,7 +119,12 @@ $(window).ready(function() {
         myGamePiece.gravity = n;
     }
 
-    var playerid;
+    $("#accelerate").mousedown(function (event) {
+        accelerate(-0.2);
+    });
+    $("#accelerate").mouseup(function (event) {
+        accelerate(0.05);
+    });
 
     function checkNewGame() {
         console.log('checking for game');
@@ -130,14 +134,6 @@ $(window).ready(function() {
                 console.log('game found');
                 window.location.href = "http://127.0.0.1:8000/" + playerid + "/game/";
             }
-        });
-    }
-
-    function createUserRequest() {
-        console.log('creating a user');
-        $.get('', function (response) {
-            console.log('user created');
-            playerid = response['pk'];
         });
     }
 

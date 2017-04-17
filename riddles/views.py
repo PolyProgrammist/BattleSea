@@ -26,4 +26,5 @@ def createuserview(request):
     ss = SeaState()
     ss.save()
     SeaController.creategames()
-    return render(request, 'Flappy.html', {'id' : ss.pk})
+    print(ss.pk)
+    return render(request, 'Flappy.html', {'playerid' : ss.pk})

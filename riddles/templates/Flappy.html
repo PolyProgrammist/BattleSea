@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
+{% load static %}
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript">playerid = {{ playerid }};</script>
 <style>
 canvas {
     border:1px solid #d3d3d3;
@@ -14,7 +17,9 @@ canvas {
 
 </script>
 <br>
-<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
+<button id="accelerate">ACCELERATE</button>
 <p>We are finding a battle sea game for you, play this awhile</p>
+
+<script src="{% static 'Flappy.js' %}"> </script>
 </body>
 </html>
