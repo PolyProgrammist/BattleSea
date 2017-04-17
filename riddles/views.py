@@ -22,15 +22,12 @@ def hitview(request, row, col, playerid):
 
 
 def testifplaying(request, playerid):
-    t = SeaState.objects.filter(pk=playerid, customizing=True).count()
-    return JsonResponse({'playing': t > 0})
-
+    return JsonResponse({'playing': SeaState.plays(playerid)})
 
 def createuserview(request):
-    ss = SeaState()
-    ss.save()
+    pk = SeaState.createuser()
     SeaController.creategames()
-    return render(request, 'Flappy.html', {'playerid' : ss.pk})
+    return render(request, 'Flappy.html', {'playerid' : pk})
 
 @csrf_exempt
 def thejsonevent(request):
@@ -38,5 +35,6 @@ def thejsonevent(request):
         if request.method == 'POST':
             data = json.loads(request.body)
             t = data['ships']
-            return JsonResponse({'result': 'Ok table' if SeaController.FieldValidation(t).is_valid() else 'Bad table'})
+            b = SeaController.FieldValidation(t).is_valid()
+            return JsonResponse({'result': 'Ok table' if b else 'Bad table'})
     return JsonResponse({'result': 'Not ajax or not GET'})

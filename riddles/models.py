@@ -12,3 +12,12 @@ class SeaState(models.Model):
     customizing = models.BooleanField(default=False)
     gameid = models.IntegerField(default=0)
     field = models.CharField(max_length=255)
+
+    @classmethod
+    def plays(cls, playerid):
+        return cls.objects.filter(pk=playerid, customizing=True).count() > 0
+    @classmethod
+    def createuser(cls):
+        ss = cls()
+        ss.save()
+        return ss.pk
