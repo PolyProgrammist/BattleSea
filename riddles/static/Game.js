@@ -56,7 +56,7 @@ $(window).ready(function(){
     }
 
     $('#submit').click(function (event) {
-        var myEvent = {ships : translateToDigs(ships) };
+        var myEvent = {ships : translateToDigs(ships), pk: playerid };
         console.log(JSON.stringify(myEvent));
         $.ajax({
             url: '/thejsonevent/',

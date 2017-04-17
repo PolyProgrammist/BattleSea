@@ -36,5 +36,7 @@ def thejsonevent(request):
             data = json.loads(request.body)
             t = data['ships']
             b = SeaController.FieldValidation(t).is_valid()
+            if b:
+                SeaState.objects.filter(pk=data['pk']).update(playing=True)
             return JsonResponse({'result': 'Ok table' if b else 'Bad table'})
     return JsonResponse({'result': 'Not ajax or not GET'})
