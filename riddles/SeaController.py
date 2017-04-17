@@ -12,6 +12,8 @@ def create_one_game(a, b):
     game.save()
     a.customizing = True
     b.customizing = True
+    a.gameid = game.pk
+    b.gameid = game.pk
     a.save()
     b.save()
 
@@ -57,3 +59,5 @@ class FieldValidation:
                     return -1
                 res += size
         return res
+
+#[[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]

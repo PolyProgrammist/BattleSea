@@ -46,7 +46,7 @@ $(window).ready(function() {
                 ctx.fillStyle = color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
-        }
+        };
         this.newPos = function () {
             this.gravitySpeed += this.gravity;
             this.x += this.speedX;
@@ -128,7 +128,7 @@ $(window).ready(function() {
 
     function checkNewGame() {
         reqcnt += 1;
-        if (reqcnt > 100) {
+        if (reqcnt > 20) {
             $.get(playerid + "/testifplaying/", function (response) {
                 console.log('responsed');
                 if (response['playing']) {

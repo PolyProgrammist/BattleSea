@@ -38,5 +38,13 @@ def thejsonevent(request):
             b = SeaController.FieldValidation(t).is_valid()
             if b:
                 SeaState.objects.filter(pk=data['pk']).update(playing=True)
-            return JsonResponse({'result': 'Ok table' if b else 'Bad table'})
+            return JsonResponse({'result': 'ok' if b else 'bad'})
     return JsonResponse({'result': 'Not ajax or not GET'})
+
+def testifopponentsubmitted(request, playerid):
+    print('starting')
+    otherid = GameModel.otheridclass(playerid)
+    print('otherid found')
+    submitted = SeaState.objects.get(pk=otherid).playing
+    print('submitted defined')
+    return JsonResponse({'submitted' : submitted})

@@ -56,7 +56,8 @@ $(window).ready(function(){
     }
 
     $('#submit').click(function (event) {
-        var myEvent = {ships : translateToDigs(ships), pk: playerid };
+        ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        var myEvent = {ships : ttt, pk: playerid };
         console.log(JSON.stringify(myEvent));
         $.ajax({
             url: '/thejsonevent/',
@@ -66,10 +67,27 @@ $(window).ready(function(){
             dataType: 'text',
             success: function(result) {
                 t = JSON.parse(result);
-                alert(t['result']);
+                alerting = t['result'] == 'ok' ? "Ok, wait for opponent" : "Your field is wrong";
+                if (t['result'] == 'ok')
+                    startCheckingOpponent();
+                alert(alerting);
             }
         });
     });
+    var checkningOpponentInterval;
+    function startCheckingOpponent() {
+        checkningOpponentInterval = setInterval(opponentOneCheck, 400);
+    }
+    function opponentOneCheck() {
+        $.get("/" + playerid + "/game" + "/testifopponentsubmitted/", function (response) {
+                console.log('responsed');
+                if (response['submitted']) {
+                    gamestate = 'playing';
+                    clearInterval(checkningOpponentInterval);
+                    alert('Start playing');
+                }
+            });
+    }
 
 });
 // handle
