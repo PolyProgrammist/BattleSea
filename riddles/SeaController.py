@@ -83,15 +83,16 @@ class HitMaker:
         return self.changestate[self.row][self.col] <= 1 and GameModel.get_client_turn(self.playerid)
 
     def make_hit(self):
+
         if self.changestate[self.row][self.col] == 0:
             self.changestate[self.row][self.col] = 4
-        else:
+            GameModel.change_turn(self.playerid)
+        elif self.changestate[self.row][self.col] == 1:
             self.was = [[False for j in range(10)] for i in range(10)]
             if self.dfs_check_kill(self.row, self.col):
                 self.was = [[False for j in range(10)] for i in range(10)]
                 self.dfs_killer(self.row, self.col)
 
-        GameModel.change_turn(self.playerid)
         self.stringchangestate = json.dumps(self.changestate)
         SeaState.objects.filter(pk=GameModel.otheridclass(self.playerid)).update(field=self.stringchangestate)
         return self.hidden(self.changestate)
