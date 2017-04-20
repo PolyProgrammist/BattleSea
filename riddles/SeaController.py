@@ -5,7 +5,6 @@ from .models import SeaState, GameModel
 
 def creategames():
     q = SeaState.objects.filter(customizing=False, playing=False)
-    print(len(q))
     i = 0
     while (i + 1 < len(q)):
         create_one_game(q[i], q[i + 1])
@@ -17,8 +16,6 @@ def create_one_game(a, b):
     game.save()
     a.customizing = True
     b.customizing = True
-    print(a.pk)
-    print(b.pk)
     a.gameid = game.pk
     b.gameid = game.pk
     a.save()

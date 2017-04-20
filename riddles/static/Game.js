@@ -25,7 +25,6 @@ $(window).ready(function(){
         getreq : function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" },
         handle : function (data, obj) {
             if (data['result'] == 'ok') {
-                console.log(data);
                 otherships = translateFromDigs(data['ships']);
                 turn = !turn;
                 update_colors();
@@ -83,12 +82,11 @@ $(window).ready(function(){
     }
 
     $('#submit').click(function (event) {
-        ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
-        myships = translateFromDigs(ttt);
+        //ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        //myships = translateFromDigs(ttt);
         turn = true;
         update_colors();
         var myEvent = {ships : translateToDigs(myships), pk: playerid };
-        console.log(JSON.stringify(myEvent));
         $.ajax({
             url: '/thejsonevent/',
             type: 'POST',
@@ -111,12 +109,9 @@ $(window).ready(function(){
     }
     function opponentOneCheck() {
         $.get("/" + playerid + "/game" + "/testifopponentsubmitted/", function (response) {
-                console.log('submittedresponsed');
                 if (response['submitted']) {
                     gamestate = 'playing';
                     clearInterval(checkningOpponentInterval);
-                    console.log('turn is ')
-                    console.log(turn)
                     turn = response['turn'];
                     if (!turn)
                         waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
@@ -140,7 +135,6 @@ $(window).ready(function(){
     
     function waitForOpponentToGo() {
         $.get("/" + playerid + "/game" + "/testifopponentwent/", function (response) {
-                console.log('wentresponsed');
                 if (response['went']) {
                     clearInterval(waitingToGoInterval);
                     myships = translateFromDigs(response['ships']);

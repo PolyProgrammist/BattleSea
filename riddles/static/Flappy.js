@@ -130,7 +130,6 @@ $(window).ready(function() {
         reqcnt += 1;
         if (reqcnt > 20) {
             $.get(playerid + "/testifplaying/", function (response) {
-                console.log('responsed');
                 if (response['playing']) {
                     clearInterval(myGameAreainterval);
                     window.location.href = "http://127.0.0.1:8000/" + playerid + "/game/";
@@ -141,7 +140,6 @@ $(window).ready(function() {
     }
 
     var reqcnt = 0;
-    console.log('hello world try css');
     $('#accelerate').css("background-color", "yellow");
     startGame();
 });
