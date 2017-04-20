@@ -5,9 +5,11 @@ from .models import SeaState, GameModel
 
 def creategames():
     q = SeaState.objects.filter(customizing=False, playing=False)
-    for i in range(len(q)):
-        if i + 1 < len(q):
-            create_one_game(q[i], q[i + 1])
+    print(len(q))
+    i = 0
+    while (i + 1 < len(q)):
+        create_one_game(q[i], q[i + 1])
+        i += 2
 
 
 def create_one_game(a, b):
@@ -15,6 +17,8 @@ def create_one_game(a, b):
     game.save()
     a.customizing = True
     b.customizing = True
+    print(a.pk)
+    print(b.pk)
     a.gameid = game.pk
     b.gameid = game.pk
     a.save()
@@ -72,13 +76,13 @@ class FieldValidation:
 class HitMaker:
     def __init__(self, playerid, row, col):
         self.playerid = playerid
-        self.row = row
-        self.col = col
+        self.row = int(row)
+        self.col = int(col)
 
     def can_hit(self):
         self.stringchangestate = SeaState.objects.get(pk=GameModel.otheridclass(self.playerid)).field
         self.changestate = json.loads(self.stringchangestate)
-        game = GameModel.objects.get(pk=self.changestate.gameid)
+        game = GameModel.game_by_user(playerid=self.playerid)
         return self.changestate[self.row][self.col] <= 1 and GameModel.get_client_turn(self.playerid)
 
     def make_hit(self):

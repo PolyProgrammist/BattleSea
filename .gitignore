@@ -1,1 +1,7 @@
 riddles/migrations
+.idea/
+Training/
+db.sqlite3
+django_example/
+manage.py
+riddles/__pycache__/

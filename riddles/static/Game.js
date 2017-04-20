@@ -6,6 +6,15 @@ $(window).ready(function(){
     healthy_color = "#2edc2c";
     cannot_color = "#aaaaaa";
 
+
+    var myships = [];
+    var otherships = [];
+    var turn;
+    var gamestate = 'customizing';
+    var sitranslate = {'sea' : 0, 'healthy' : 1, 'hit' : 2, 'destroyed' : 3, 'failed' : 4, 'cannot' : 5};
+    var istranslate = ['sea', 'healthy', 'hit', 'destroyed', 'failed', 'cannot'];
+    var ictranslate = [sea_color, healthy_color, hit_color, destroyed_color, failed_color, cannot_color];
+
     $('.block').click(function(event){
         handleclick(event, this);
     });
@@ -16,10 +25,11 @@ $(window).ready(function(){
         getreq : function (pos) { return pos[0] + "/" + pos[1] + "/" + "hit" },
         handle : function (data, obj) {
             if (data['result'] == 'ok') {
-                otherships = data['ships'];
-                update_colors();
+                console.log(data);
+                otherships = translateFromDigs(data['ships']);
                 turn = !turn;
-                waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
+                update_colors();
+                waitingToGoInterval = setInterval(waitForOpponentToGo, 4000);
             }
         },
         reqpos : function (event, obj) {$.get( handlehit.getreq(rowcol(event)), function(data) {handlehit.handle(data, obj);});}
@@ -29,7 +39,7 @@ $(window).ready(function(){
         t = event.target.id.charAt(0);
         pos = rowcol(event);
         if (gamestate == 'playing' && t == 'o' && otherships[pos[0]][pos[1]] == 'sea' && turn)
-            handleplaying(event, obj)
+            handleplaying(event, obj);
         else if (gamestate == 'customizing' && t == 'm'){
             pos = rowcol(event);
             myships[pos[0]][pos[1]] = myships[pos[0]][pos[1]] == 'healthy' ? 'sea' : 'healthy';
@@ -38,35 +48,45 @@ $(window).ready(function(){
         }
     }
 
-    var myships = [];
-    var otherships = [];
-    var turn;
-    var gamestate = 'customizing';
-    var sitranslate = {'sea' : 0, 'healthy' : 1, 'hit' : 2, 'destroyed' : 3, 'failed' : 4, 'cannot' : 5};
-    var istranslate = ['sea', 'healthy', 'hit', 'destroyed', 'failed', 'cannot'];
-    var ictranslate = [sea_color, healthy_color, hit_color, destroyed_color, failed_color, cannot_color];
+
+
     function startpreparing() {
         for (i = 0; i < 10; i++) {
             myships.push([]);
             for (j = 0; j < 10; j++)
                 myships[i].push('sea');
         }
+        for (i = 0; i < 10; i++) {
+            otherships.push([]);
+            for (j = 0; j < 10; j++)
+                otherships[i].push('sea');
+        }
     }
 
     startpreparing();
 
-    function translateToDigs(ships){
+
+    function translateLang(ships, func){
         res = [];
         for (i = 0; i < 10; i++) {
             res.push([]);
             for (j = 0; j < 10; j++)
-                res[i].push(sitranslate[ships[i][j]]);
+                res[i].push(func[ships[i][j]]);
         }
         return res;
     }
+    function translateToDigs(ships){
+        return translateLang(ships, sitranslate);
+    }
+    function translateFromDigs(ships) {
+        return translateLang(ships, istranslate);
+    }
 
     $('#submit').click(function (event) {
-        //ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        myships = translateFromDigs(ttt);
+        turn = true;
+        update_colors();
         var myEvent = {ships : translateToDigs(myships), pk: playerid };
         console.log(JSON.stringify(myEvent));
         $.ajax({
@@ -95,10 +115,12 @@ $(window).ready(function(){
                 if (response['submitted']) {
                     gamestate = 'playing';
                     clearInterval(checkningOpponentInterval);
+                    console.log('turn is ')
+                    console.log(turn)
                     turn = response['turn'];
-                    if (turn)
-                        waitingToGoInterval = setInterval(waitForOpponentToGo(), 400);
-                    alert('Start playing!' + (turn ? " Your" :"Opponent's") + "turn!");
+                    if (!turn)
+                        waitingToGoInterval = setInterval(waitForOpponentToGo, 4000);
+                    alert('Start playing!' + (turn ? " Your" :"Opponent's") + " turn!");
                 }
             });
     }
@@ -108,11 +130,11 @@ $(window).ready(function(){
     }
 
     function update_colors() {
-        someships = turn ? myships : otherships;
+        someships = translateToDigs(turn ? myships : otherships);
         firstlet = turn ? 'm' : 'o';
         for (i = 0; i < 10; i++) {
             for (j = 0; j < 10; j++)
-                $(firstlet + 'board' + i.toString() + j.toString()).css('background_color', ictranslate[someships[i][j]]);
+                $('#' + firstlet + 'block' + i.toString() + j.toString()).css('background-color', ictranslate[someships[i][j]]);
         }
     }
     
@@ -121,9 +143,9 @@ $(window).ready(function(){
                 console.log('wentresponsed');
                 if (response['went']) {
                     clearInterval(waitingToGoInterval);
-                    myships = response['ships'];
-                    update_colors();
+                    myships = translateFromDigs(response['ships']);
                     turn = !turn;
+                    update_colors();
                     alert('Your turn!');
                 }
             });

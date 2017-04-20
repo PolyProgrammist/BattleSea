@@ -29,13 +29,14 @@ def hitview(request, row, col, playerid):
 def testifopponentwent(request, playerid):
     if not GameModel.get_client_turn(playerid):
         return JsonResponse({'went' : False})
-    stringchangestate = SeaState.objects.get(pk=GameModel.otheridclass(playerid)).field
+    stringchangestate = SeaState.objects.get(pk=playerid).field
     changestate = json.loads(stringchangestate)
     return JsonResponse({'went' : True, 'ships' : changestate})
 
 
 def testifplaying(request, playerid):
-    return JsonResponse({'playing': SeaState.plays(playerid)})
+    t = SeaState.plays(playerid)
+    return JsonResponse({'playing': t})
 
 
 def createuserview(request):
@@ -61,4 +62,5 @@ def thejsonevent(request):
 def testifopponentsubmitted(request, playerid):
     otherid = GameModel.otheridclass(playerid)
     submitted = SeaState.objects.get(pk=otherid).playing
-    return JsonResponse({'submitted': submitted, 'turn' : GameModel.get_client_turn(playerid)})
+    t = GameModel.get_client_turn(playerid)
+    return JsonResponse({'submitted': submitted, 'turn' : t})

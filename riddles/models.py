@@ -5,22 +5,23 @@ class GameModel(models.Model):
     player1 = models.IntegerField(default=0)
     player2 = models.IntegerField(default=0)
     turn = models.BooleanField(default=False)
-    lastchange = models.CharField(max_length=3) #position and state
 
     def otherid(self, playerid):
-        if playerid == self.player1:
-            return  self.player2
+        if int(playerid) == int(self.player1):
+            return self.player2
         else:
             return self.player1
 
     @classmethod
     def otheridclass(cls, playerid):
-        return cls.game_by_user(playerid).otherid(playerid)
+        t = cls.game_by_user(playerid).otherid(playerid)
+        return t
 
     @classmethod
     def get_client_turn(cls, playerid):
         game = cls.game_by_user(playerid)
-        return (game.player1 == playerid) == game.turn
+        t = (int(game.player1) == int(playerid)) == bool(game.turn)
+        return t
 
     @classmethod
     def change_turn(cls, playerid):
