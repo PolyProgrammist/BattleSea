@@ -91,6 +91,7 @@ class HitMaker:
         else:
             self.was = [[False for j in range(10)] for i in range(10)]
             if self.dfs_check_kill(self.row, self.col):
+                self.was = [[False for j in range(10)] for i in range(10)]
                 self.dfs_killer(self.row, self.col)
 
         GameModel.change_turn(self.playerid)
@@ -103,6 +104,7 @@ class HitMaker:
 
     def dfs_check_kill(self, i, j):
         self.was[i][j] = True
+        self.changestate[i][j] = 2
         for k in range(4):
             ni, nj = i + wrdi[k], j + wrdj[k]
             if okpos(ni, nj):
@@ -111,9 +113,10 @@ class HitMaker:
         for k in range(4):
             ni, nj = i + okdi[k], j + okdj[k]
             if okpos(ni, nj) and not self.was[ni][nj]:
-                res = res and self.changestate[ni][nj] == 1
+                if self.changestate[ni][nj] == 1:
+                    return False
                 if self.changestate[ni][nj] == 2:
-                    res = res and self.dfs_check_kill(self, ni, nj)
+                    res = res and self.dfs_check_kill(ni, nj)
         return res
 
     def dfs_killer(self, i, j):
@@ -130,5 +133,5 @@ class HitMaker:
                 if self.changestate[ni][nj] == 0:
                     self.changestate[ni][nj] = 5
                 if self.changestate[ni][nj] == 2:
-                    self.dfs_killer(self, ni, nj)
+                    self.dfs_killer(ni, nj)
 

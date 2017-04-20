@@ -29,7 +29,7 @@ $(window).ready(function(){
                 otherships = translateFromDigs(data['ships']);
                 turn = !turn;
                 update_colors();
-                waitingToGoInterval = setInterval(waitForOpponentToGo, 4000);
+                waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
             }
         },
         reqpos : function (event, obj) {$.get( handlehit.getreq(rowcol(event)), function(data) {handlehit.handle(data, obj);});}
@@ -119,7 +119,7 @@ $(window).ready(function(){
                     console.log(turn)
                     turn = response['turn'];
                     if (!turn)
-                        waitingToGoInterval = setInterval(waitForOpponentToGo, 4000);
+                        waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
                     alert('Start playing!' + (turn ? " Your" :"Opponent's") + " turn!");
                 }
             });
