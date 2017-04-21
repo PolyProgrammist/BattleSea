@@ -167,7 +167,6 @@ $(window).ready(function(){
         $('#oboard').addClass('undispoboard');
     }
     function removeButton(){
-        $('#mboard').addClass('dispinline')
         $('#submit').addClass('undispoboard');
     }
     function showOpponnent(){

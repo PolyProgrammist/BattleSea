@@ -12,11 +12,12 @@
 </head>
 
 <body>
+    <div class="boards">
     {% for board in bcnt %}
         <div class="board" id="{{ board }}board">
 
         {% for row in lockcnt %}
-        <div>
+        <div class="block-container">
             {% for col in lockcnt %}
                 <div class="block" id='{{ board }}block{{ row }}{{ col }}'></div>
             {% endfor %}
@@ -25,6 +26,7 @@
 
         </div>
     {% endfor %}
+    </div>
     <button id="submit">Submit</button>
     <script src="{% static 'Game.js' %}"> </script>
 </body>
