@@ -31,6 +31,19 @@ def okpos(i, j):
     return i >= 0 and j >= 0 and i < 10 and j < 10
 
 
+def getstate(playerid):
+    stringstate = SeaState.objects.get(pk=playerid).field
+    return json.loads(stringstate)
+
+
+def okfield(state):
+    for i in range(10):
+        for j in range(10):
+            if state[i][j] == 1:
+                return True
+    return False
+
+
 class FieldValidation:
     def __init__(self, ships):
         self.ships = ships

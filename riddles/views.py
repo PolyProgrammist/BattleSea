@@ -22,16 +22,21 @@ def hitview(request, row, col, playerid):
     t = SeaController.HitMaker(playerid, row, col)
     if (t.can_hit()):
         d = t.make_hit()
-        return JsonResponse({'result': 'ok', 'ships': d})
+        state = SeaController.getstate(int(GameModel.otheridclass(playerid)))
+        t = 'go' if SeaController.okfield(state) else 'win'
+        if (t == 'win'):
+            GameModel.change_turn(playerid)
+        return JsonResponse({'result': 'ok', 'ships': d, 'gameend' : t})
     else:
         return JsonResponse({'result': 'fail'})
 
+
 def testifopponentwent(request, playerid):
-    if not GameModel.get_client_turn(playerid):
-        return JsonResponse({'went' : False})
-    stringchangestate = SeaState.objects.get(pk=playerid).field
-    changestate = json.loads(stringchangestate)
-    return JsonResponse({'went' : True, 'ships' : changestate})
+    state = SeaController.getstate(playerid)
+    t = 'go' if SeaController.okfield(state) else 'lose'
+    if not GameModel.get_client_turn(playerid) and t == 'go':
+        return JsonResponse({'went': False})
+    return JsonResponse({'went': True, 'ships': state, 'gameend' : t})
 
 
 def testifplaying(request, playerid):
@@ -63,4 +68,4 @@ def testifopponentsubmitted(request, playerid):
     otherid = GameModel.otheridclass(playerid)
     submitted = SeaState.objects.get(pk=otherid).playing
     t = GameModel.get_client_turn(playerid)
-    return JsonResponse({'submitted': submitted, 'turn' : t})
+    return JsonResponse({'submitted': submitted, 'turn': t})
