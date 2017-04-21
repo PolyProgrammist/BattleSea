@@ -2,10 +2,10 @@
     width: 40px;
     height: 40px;
     background-color: #87b7ff;
-    border: 3px solid black;
-    display: inline-block;
     padding: 0;
     column-gap: 0;
+    float: left;
+    box-shadow: black 0 0 0 1px;
 }
 
 body{

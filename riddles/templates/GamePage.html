@@ -2,7 +2,7 @@
 <html lang="en">
 {% load static %}
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF -8">
     <title>Title</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <link type="text/javascript" href="{% static 'Game.js' %}">
@@ -13,7 +13,7 @@
 
 <body>
     {% for board in blocks %}
-        <div class="board">
+        <div class="board" id="{{ board }}">
 
         {% for row in board %}
         <div>
