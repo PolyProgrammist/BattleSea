@@ -12,13 +12,13 @@
 </head>
 
 <body>
-    {% for board in blocks %}
-        <div class="board" id="{{ board }}">
+    {% for board in bcnt %}
+        <div class="board" id="{{ board }}board">
 
-        {% for row in board %}
+        {% for row in lockcnt %}
         <div>
-            {% for col in row %}
-                <div class="block" id='{{ col }}'></div>
+            {% for col in lockcnt %}
+                <div class="block" id='{{ board }}block{{ row }}{{ col }}'></div>
             {% endfor %}
         </div>
         {% endfor %}

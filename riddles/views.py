@@ -14,8 +14,10 @@ from .models import SeaState, GameModel
 def gameview(request, playerid):
     t = ['m', 'o']  # me/opponent
     blocks = [[[t[board] + 'block' + str(row) + str(col) for col in range(10)] for row in range(10)] for board in
-              range(2)]
-    return render(request, 'GamePage.html', {'blocks': blocks, 'playerid': playerid})
+               range(2)]
+    bcnt = ['m', 'o']
+    lockcnt = range(10)
+    return render(request, 'GamePage.html', {'blocks': blocks, 'playerid': playerid, 'bcnt' : bcnt, 'lockcnt' : lockcnt})
 
 
 def hitview(request, row, col, playerid):

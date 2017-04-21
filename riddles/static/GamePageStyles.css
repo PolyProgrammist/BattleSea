@@ -21,3 +21,9 @@ body{
     background-color: red;
     transform: rotateZ(90deg);
 }
+
+.undispoboard{
+    display: none;
+}
+.dispinline{
+}

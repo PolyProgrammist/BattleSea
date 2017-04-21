@@ -16,6 +16,7 @@ $(window).ready(function(){
     var ictranslate = [sea_color, healthy_color, hit_color, destroyed_color, failed_color, cannot_color];
     var gamecontinues = true;
 
+
     $('.block').click(function(event){
         handleclick(event, this);
     });
@@ -70,6 +71,7 @@ $(window).ready(function(){
         }
     }
 
+    showOnlyMe();
     startpreparing();
 
 
@@ -90,8 +92,8 @@ $(window).ready(function(){
     }
 
     $('#submit').click(function (event) {
-        //ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
-        //myships = translateFromDigs(ttt);
+        ttt = [[0,0,1,1,1,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,1,0,1],[0,1,0,0,1,0,0,0,0,0],[0,1,0,0,1,0,0,1,1,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1,0,0]]
+        myships = translateFromDigs(ttt);
         turn = true;
         update_colors();
         var myEvent = {ships : translateToDigs(myships), pk: playerid };
@@ -104,8 +106,10 @@ $(window).ready(function(){
             success: function(result) {
                 t = JSON.parse(result);
                 alerting = t['result'] == 'ok' ? "Ok, wait for opponent" : "Your field is wrong";
-                if (t['result'] == 'ok')
+                if (t['result'] == 'ok') {
+                    removeButton();
                     startCheckingOpponent();
+                }
                 alert(alerting);
             }
         });
@@ -121,6 +125,7 @@ $(window).ready(function(){
                     gamestate = 'playing';
                     clearInterval(checkningOpponentInterval);
                     turn = response['turn'];
+                    showOpponnent();
                     if (!turn)
                         waitingToGoInterval = setInterval(waitForOpponentToGo, 400);
                     alert('Start playing!' + (turn ? " Your" :"Opponent's") + " turn!");
@@ -156,6 +161,17 @@ $(window).ready(function(){
                         alert('Your turn!');
                 }
             });
+    }
+
+    function showOnlyMe(){
+        $('#oboard').addClass('undispoboard');
+    }
+    function removeButton(){
+        $('#mboard').addClass('dispinline')
+        $('#submit').addClass('undispoboard');
+    }
+    function showOpponnent(){
+        $('#oboard').removeClass('undispoboard');
     }
 });
 // handle
