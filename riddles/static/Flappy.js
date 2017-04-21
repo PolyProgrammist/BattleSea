@@ -2,8 +2,10 @@ $(window).ready(function() {
     var myGamePiece;
     var myObstacles = [];
     var myScore;
+    var pregameplaying = true;
 
     function startGame() {
+        $("#RestBut").addClass('restbt');
         myGamePiece = new component(30, 30, "red", 10, 120);
         myGamePiece.gravity = 0.05;
         myScore = new component("30px", "Consolas", "black", 280, 40, "text");
@@ -55,6 +57,8 @@ $(window).ready(function() {
         };
         this.hitBottom = function () {
             var rockbottom = myGameArea.canvas.height - this.height;
+            if (this.y < 0)
+                this.y = 0;
             if (this.y > rockbottom) {
                 this.y = rockbottom;
                 this.gravitySpeed = 0;
@@ -79,10 +83,13 @@ $(window).ready(function() {
 
     function updateGameArea() {
         checkNewGame();
+        if (!pregameplaying)
+            return;
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         for (i = 0; i < myObstacles.length; i += 1) {
             if (myGamePiece.crashWith(myObstacles[i])) {
-                clearInterval(myGameAreainterval);
+                stopGame();
+                return;
             }
         }
         myGameArea.clear();
@@ -143,4 +150,14 @@ $(window).ready(function() {
 
     var reqcnt = 0;
     startGame();
+
+    function stopGame(){
+        clearInterval(myGameAreainterval);
+        myObstacles = [];
+        $('#RestBut').removeClass('restbt');
+    }
+    $('#RestBut').click(function (event) {
+        myGameArea.clear();
+        startGame();
+    })
 });
