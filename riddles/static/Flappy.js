@@ -119,12 +119,14 @@ $(window).ready(function() {
         myGamePiece.gravity = n;
     }
 
-    $("#accelerate").mousedown(function (event) {
-        accelerate(-0.2);
+    $( ".thebody" ).keydown(function( event ) {
+      accelerate(-0.2);
     });
-    $("#accelerate").mouseup(function (event) {
-        accelerate(0.05);
+    $( ".thebody" ).keyup(function( event ) {
+      accelerate(0.05);
     });
+
+
 
     function checkNewGame() {
         reqcnt += 1;
@@ -140,6 +142,5 @@ $(window).ready(function() {
     }
 
     var reqcnt = 0;
-    $('#accelerate').css("background-color", "yellow");
     startGame();
 });
